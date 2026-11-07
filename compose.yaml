@@ -1,0 +1,45 @@
+services:
+  backend:
+    build: .
+    environment:
+      RAG_API_TOKEN: "${RAG_API_TOKEN:?missing - see README quick start}"
+      OLLAMA_URL: http://ollama:11434
+    volumes:
+      # Only this one folder is visible to the app, read-only.
+      - ${RAG_DOCS_HOST_DIR:-./sample_docs}:/docs:ro
+      - rag-data:/data
+    ports:
+      - "127.0.0.1:8000:8000" # loopback only, never LAN
+    networks: [frontend, internal]
+    depends_on: [ollama]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 128
+    mem_limit: 512m
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-models:/root/.ollama
+    networks: [internal] # no internet, not reachable from host
+    security_opt: ["no-new-privileges:true"]
+
+  # One-off: `docker compose --profile setup run --rm pull-models`
+  # Only service allowed on a networked bridge, only to download models.
+  pull-models:
+    profiles: [setup]
+    image: ollama/ollama:latest
+    entrypoint: ["/bin/sh", "-c", "ollama serve & sleep 3; ollama pull nomic-embed-text; ollama pull llama3.2:3b"]
+    volumes:
+      - ollama-models:/root/.ollama
+
+networks:
+  frontend: {}
+  internal:
+    internal: true # no external egress
+
+volumes:
+  rag-data:
+  ollama-models:
