@@ -1,0 +1,18 @@
+[
+  {"q": "How many vacation days do Northwind employees get?", "source": "northwind-handbook.md", "keywords": ["28"]},
+  {"q": "What is the incident hotline extension?", "source": "northwind-handbook.md", "keywords": ["7777"]},
+  {"q": "At what temperature and for how long do I bake Nonna Rosa's lasagna?", "source": "lasagna-recipe.md", "keywords": ["190", "45"]},
+  {"q": "What is the secret ingredient in the ragu?", "source": "lasagna-recipe.md", "keywords": ["cinnamon"]},
+  {"q": "How much did the 7-day rail pass cost in Japan?", "source": "trip-japan-2025.md", "keywords": ["50,000", "50000"]},
+  {"q": "Which ramen shop was the best on the trip?", "source": "trip-japan-2025.md", "keywords": ["Menya Kaito"]},
+  {"q": "When did I plant the tomatoes and which variety?", "source": "garden-log.md", "keywords": ["12 April", "San Marzano"]},
+  {"q": "What did I use against aphids?", "source": "garden-log.md", "keywords": ["neem"]},
+  {"q": "What tire pressure should the road bike have?", "source": "bike-maintenance.md", "keywords": ["5.5", "6 bar"]},
+  {"q": "How often should I lubricate the bike chain?", "source": "bike-maintenance.md", "keywords": ["200"]},
+  {"q": "What phrase do I say for my shutdown ritual?", "source": "deep-work-notes.md", "keywords": ["schedule shutdown complete"]},
+  {"q": "When is the weekly review?", "source": "deep-work-notes.md", "keywords": ["Friday", "16:00"]},
+  {"q": "What is the IP address of the NAS?", "source": "homelab-runbook.md", "keywords": ["192.168.1.20"]},
+  {"q": "How long does the UPS keep the NAS running?", "source": "homelab-runbook.md", "keywords": ["25"]},
+  {"q": "What is the CEO's favourite colour?", "answerable": false},
+  {"q": "What is the Wi-Fi password at the Kyoto guesthouse?", "answerable": false}
+]
