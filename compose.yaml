@@ -4,12 +4,14 @@ services:
     environment:
       RAG_API_TOKEN: "${RAG_API_TOKEN:?missing - see README quick start}"
       OLLAMA_URL: http://ollama:11434
+      RAG_REMOTE_TOKEN: "${RAG_REMOTE_TOKEN:-}" # read-only phone token; empty = remote login off
+      RAG_ALLOWED_HOSTS: "${RAG_ALLOWED_HOSTS:-}" # extra Host names, e.g. mac.tailnet.ts.net
     volumes:
       # Only this one folder is visible to the app, read-only.
-      - ${RAG_DOCS_HOST_DIR:-./sample_docs}:/docs:ro
+      - ${RAG_DOCS_HOST_DIR:-./documents}:/docs:ro
       - rag-data:/data
     ports:
-      - "127.0.0.1:8000:8000" # loopback only, never LAN
+      - "127.0.0.1:${RAG_PORT:-8000}:8000" # loopback only, never LAN
     networks: [frontend, internal]
     depends_on: [ollama]
     read_only: true
@@ -24,6 +26,26 @@ services:
     volumes:
       - ollama-models:/root/.ollama
     networks: [internal] # no internet, not reachable from host
+    security_opt: ["no-new-privileges:true"]
+
+  # `make eval`: quality evaluation on the synthetic demo corpus (never touches your documents)
+  eval:
+    profiles: [eval]
+    build: .
+    entrypoint: ["python", "-m", "personal_rag.evaluate"]
+    environment:
+      RAG_API_TOKEN: "${RAG_API_TOKEN:?missing - see README quick start}"
+      OLLAMA_URL: http://ollama:11434
+      RAG_DOCS_DIR: /eval-docs
+      RAG_DATA_DIR: /tmp/eval
+    volumes:
+      - ./sample_docs:/eval-docs:ro
+      - ./eval:/eval:ro
+    networks: [internal]
+    depends_on: [ollama]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
 
   # One-off: `docker compose --profile setup run --rm pull-models`

@@ -5,3 +5,11 @@ __pycache__/
 .ruff_cache/
 .pytest_cache/
 *.sqlite
+
+# personal data - never commit
+/documents/
+/Screenshot*
+*.pdf
+!tests/**/*.pdf
+.coverage
+htmlcov/
