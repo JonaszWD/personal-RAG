@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="robots" content="noindex">
+  <title>Personal RAG</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main id="login" hidden>
+    <h1>Personal RAG</h1>
+    <form id="login-form">
+      <label for="token">Access token</label>
+      <input id="token" type="password" autocomplete="current-password"
+             autocapitalize="none" autocorrect="off" spellcheck="false" required>
+      <button type="submit">Sign in</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </main>
+
+  <main id="app" hidden>
+    <header>
+      <h1>Personal RAG</h1>
+      <button id="logout" class="secondary" type="button">Sign out</button>
+    </header>
+
+    <details id="docs-box">
+      <summary id="docs-summary">Documents</summary>
+      <ul id="docs"></ul>
+    </details>
+
+    <section id="chat" aria-live="polite">
+      <div id="answer"></div>
+      <p id="sources" class="muted"></p>
+      <p id="error" class="error" role="alert"></p>
+    </section>
+
+    <form id="ask-form">
+      <textarea id="question" rows="2" maxlength="2000" required
+                placeholder="Ask about your files..."></textarea>
+      <div class="row">
+        <button id="send" type="submit">Ask</button>
+        <button id="stop" class="secondary" type="button" hidden>Stop</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

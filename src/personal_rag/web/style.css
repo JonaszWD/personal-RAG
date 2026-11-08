@@ -1,0 +1,46 @@
+:root {
+  --bg: #fafafa; --fg: #1a1a1a; --muted: #6b6b6b; --card: #fff;
+  --accent: #2557d6; --accent-fg: #fff; --border: #d8d8d8; --err: #b3261e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212; --fg: #ececec; --muted: #9a9a9a; --card: #1c1c1e;
+    --accent: #6c93ff; --accent-fg: #0b0b0b; --border: #333; --err: #ff8a80;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.5 -apple-system, system-ui, sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+main { max-width: 720px; margin: 0 auto; padding: 16px; display: flex;
+       flex-direction: column; min-height: 100dvh; gap: 12px; }
+[hidden] { display: none !important; }
+header { display: flex; justify-content: space-between; align-items: center; }
+h1 { font-size: 1.25rem; margin: 0; }
+label { display: block; margin-bottom: 4px; color: var(--muted); }
+input, textarea {
+  width: 100%; font: inherit; font-size: 16px; /* >=16px stops iOS zoom */
+  padding: 12px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card); color: var(--fg);
+}
+button {
+  font: inherit; padding: 12px 18px; border: 0; border-radius: 10px;
+  background: var(--accent); color: var(--accent-fg); min-height: 44px;
+}
+button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+button:disabled { opacity: .5; }
+#login-form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; }
+summary { cursor: pointer; }
+#docs { margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: .9rem; }
+#chat { flex: 1; overflow-wrap: anywhere; }
+#answer { white-space: pre-wrap; }
+.muted { color: var(--muted); font-size: .9rem; }
+.error { color: var(--err); min-height: 1.2em; margin: 0; }
+#ask-form { position: sticky; bottom: 0; background: var(--bg); padding: 8px 0 12px;
+            display: flex; flex-direction: column; gap: 8px; }
+.row { display: flex; gap: 8px; }
+.row button:first-child { flex: 1; }

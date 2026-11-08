@@ -37,6 +37,7 @@ def make_client(tmp_path: Path) -> TestClient:
         chunk_overlap=10,
         top_k=2,
         max_question_chars=50,
+        allowed_hosts=("testserver",),
     )
     llm: Any = FakeLLM()
     return TestClient(create_app(cfg, llm))
@@ -52,8 +53,8 @@ def test_auth_required(tmp_path: Path) -> None:
 def test_ingest_and_query(tmp_path: Path) -> None:
     c = make_client(tmp_path)
     h = {"Authorization": f"Bearer {TOKEN}"}
-    assert c.post("/ingest", headers=h).json()["indexed"] == 1
-    assert c.post("/ingest", headers=h).json()["unchanged"] == 1
+    assert c.post("/ingest?wait=true", headers=h).json()["indexed"] == 1
+    assert c.post("/ingest?wait=true", headers=h).json()["unchanged"] == 1
     r = c.post("/query", headers=h, json={"question": "python?"})
     assert r.json() == {"answer": "answer from fake", "sources": ["n.md"]}
 

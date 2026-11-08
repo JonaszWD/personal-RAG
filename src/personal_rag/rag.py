@@ -33,6 +33,10 @@ def _attr(value: str) -> str:
     return value.replace('"', "'").replace("<", "").replace(">", "")
 
 
+def retrieve(question: str, store: Store, llm: Ollama, top_k: int) -> list[Hit]:
+    return store.search(llm.embed([question])[0], top_k)
+
+
 def answer(question: str, store: Store, llm: Ollama, top_k: int) -> Answer:
     hits = store.search(llm.embed([question])[0], top_k)
     if not hits:

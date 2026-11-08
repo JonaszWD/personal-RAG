@@ -27,6 +27,14 @@ class Settings:
     chunk_overlap: int
     top_k: int
     max_question_chars: int
+    # remote (browser) access - off unless remote_token is set
+    remote_token: str | None = None
+    allowed_hosts: tuple[str, ...] = ("127.0.0.1", "localhost")
+    login_max_failures: int = 5
+    login_window_s: int = 600
+    session_ttl_s: int = 43_200
+    query_rate_per_min: int = 20
+    max_body_bytes: int = 16_384
 
     @property
     def size_limits(self) -> dict[str, int]:
@@ -37,7 +45,17 @@ class Settings:
         token = os.environ.get("RAG_API_TOKEN", "")
         if len(token) < 32:
             raise RuntimeError("RAG_API_TOKEN must be set and at least 32 characters")
+        remote = os.environ.get("RAG_REMOTE_TOKEN", "") or None
+        if remote is not None and (len(remote) < 32 or remote == token):
+            raise RuntimeError("RAG_REMOTE_TOKEN must be 32+ chars and differ from RAG_API_TOKEN")
+        extra_hosts = tuple(
+            h.strip().lower()
+            for h in os.environ.get("RAG_ALLOWED_HOSTS", "").split(",")
+            if h.strip()
+        )
         return cls(
+            remote_token=remote,
+            allowed_hosts=("127.0.0.1", "localhost", *extra_hosts),
             docs_dir=Path(os.environ.get("RAG_DOCS_DIR", "/docs")),
             data_dir=Path(os.environ.get("RAG_DATA_DIR", "/data")),
             api_token=token,

@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+from collections.abc import Iterator
+
 import httpx
 
 
@@ -31,3 +34,24 @@ class Ollama:
         )
         r.raise_for_status()
         return str(r.json()["message"]["content"])
+
+    def chat_stream(self, system: str, user: str) -> Iterator[str]:
+        body = {
+            "model": self._chat_model,
+            "stream": True,
+            "options": {"temperature": 0.1},
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+        }
+        with self._client.stream("POST", "/api/chat", json=body) as r:
+            r.raise_for_status()
+            for line in r.iter_lines():
+                if not line:
+                    continue
+                data = json.loads(line)
+                if piece := data.get("message", {}).get("content"):
+                    yield str(piece)
+                if data.get("done"):
+                    break
